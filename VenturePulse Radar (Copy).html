@@ -1,0 +1,749 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>VenturePulse Radar (Copy)</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{color-scheme:dark;--bg:#0b0f19;--card:#131b2e;--card2:#0e1526;--blue:#38bdf8;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--text:#f8fafc;--muted:#94a3b8;--border:#1e293b}
+*{box-sizing:border-box}
+html,body{background:#0b0f19}
+body{margin:0;padding-block:14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--bg);color:var(--text);display:flex;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.app{width:100%;max-width:560px}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:10px}
+h1{font-size:20px;margin:0}h1 span{color:var(--blue)}
+.badge{font-size:11px;font-weight:600;color:var(--green);background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);padding:4px 10px;border-radius:20px}
+.view{display:none}.view.on{display:block}
+.bar{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.bar .grow{flex:1;font-size:12px;color:var(--muted)}
+.pill{background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:20px;padding:8px 12px;font-size:12px;font-weight:600}
+.pill.blue{color:#06202e;background:var(--blue);border-color:var(--blue)}
+.sec{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin:18px 0 8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.card.tap{cursor:pointer}
+.card.hot{border-color:rgba(239,68,68,.5)}
+.card.hotup{border-color:rgba(34,197,94,.5)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.name{font-weight:700;font-size:15px}.sym{color:var(--muted);font-size:12px;margin-left:6px}
+.chg{font-weight:800;font-size:18px}
+.up{color:var(--green)}.down{color:var(--red)}
+.tag{font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:rgba(56,189,248,.15);color:var(--blue);display:inline-block;margin:6px 6px 0 0}
+.tag.y{background:rgba(245,158,11,.15);color:var(--yellow)}
+.why{font-size:13px;color:var(--muted);line-height:1.5;margin-top:8px}
+.why b{color:var(--text)}
+.hl{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+.muted{color:var(--muted);font-size:12px;line-height:1.5}
+.loading{text-align:center;color:var(--muted);padding:22px;font-size:14px}
+.err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);color:#fca5a5;font-size:12px;padding:10px;border-radius:8px;margin-bottom:10px;display:none;word-break:break-word}
+.demo{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);color:var(--yellow);font-size:12px;border-radius:8px;padding:8px 10px;margin-bottom:10px}
+.banner{position:fixed;top:10px;left:10px;right:10px;max-width:540px;margin:0 auto;background:#1b2845;border:1px solid var(--blue);border-radius:12px;padding:12px 14px;font-size:13px;z-index:9;display:none;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+.back{background:none;border:0;color:var(--blue);font-weight:600;font-size:14px;cursor:pointer;padding:0;margin-bottom:12px}
+.box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px}
+.box h2{font-size:18px;margin:0 0 4px}
+.price{display:flex;align-items:baseline;gap:10px;margin:6px 0}.price b{font-size:28px}
+.ranges{display:flex;gap:6px;margin:8px 0}
+.rg{background:var(--card2);color:var(--muted);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;font-weight:600}
+.rg.on{color:var(--blue);border-color:var(--blue)}
+.chartbox{background:#080c14;border:1px solid var(--border);border-radius:10px;padding:8px;position:relative}
+svg{display:block;width:100%;height:auto}
+.legend{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.6}
+.legend i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
+.tip{position:absolute;top:8px;left:12px;font-size:11px;background:rgba(19,27,46,.92);border:1px solid var(--border);border-radius:6px;padding:4px 8px;pointer-events:none;display:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:10px}
+.kpi small{display:block;color:var(--muted);font-size:11px;margin-bottom:2px}.kpi b{font-size:14px}
+.reco{border-radius:10px;padding:14px;border:1px solid}
+.reco.pos{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.35)}
+.reco.neg{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.35)}
+.reco.neu{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.35)}
+.reco h4{margin:0 0 6px;font-size:15px}
+.reco ul{margin:8px 0 0;padding-left:18px;font-size:13px;color:var(--muted);line-height:1.5}
+.meter{height:8px;border-radius:4px;background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e);position:relative;margin:10px 0 4px}
+.meter i{position:absolute;top:-4px;width:4px;height:16px;background:#fff;border-radius:2px;margin-left:-2px}
+.mlabels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.links a{display:block;text-align:center;text-decoration:none;color:var(--blue);background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.3);padding:12px;border-radius:8px;font-size:13px;font-weight:600;margin-top:8px}
+.warn{font-size:11px;color:var(--muted);line-height:1.5;border-top:1px solid var(--border);margin-top:16px;padding-top:10px}
+.cd{font-size:11px;font-weight:800;color:#06202e;background:var(--yellow);padding:3px 9px;border-radius:12px;white-space:nowrap}
+.cd.soon{background:var(--red);color:#fff}
+.exp{background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.25);border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:var(--muted);line-height:1.5}
+.exp b{color:var(--text)}
+.note{font-size:11px;color:var(--yellow);margin-top:6px}
+.ev{border-left:3px solid var(--blue)}
+.af{border-left:3px solid var(--yellow)}
+.mini{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--card2);border:1px solid var(--border);margin:6px 6px 0 0;cursor:pointer}
+
+.tabs{display:flex;gap:6px;margin:2px 0 14px;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0}
+.tab{flex:1;min-width:0;padding:10px 2px;font-size:12.5px;font-weight:700;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--muted)}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#06202e}
+.panel{display:none}.panel.on{display:block}
+.intro{margin-bottom:10px;font-size:13px}
+.glance{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:6px}
+.glance h3{margin:0 0 8px;font-size:15px}
+.glance ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.glance li{font-size:14px;line-height:1.45;color:var(--muted)}
+.glance li b{color:var(--text)}
+details.dc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:0;margin-bottom:10px}
+details.dc>summary{list-style:none;cursor:pointer;padding:14px}
+details.dc>summary::-webkit-details-marker{display:none}
+details.dc>summary::after{content:"Mehr anzeigen ▾";display:block;margin-top:8px;font-size:12px;color:var(--blue);font-weight:600}
+details.dc[open]>summary::after{content:"Weniger ▴"}
+details.dc .body{padding:0 14px 14px}
+.srow{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.st{font-weight:700;font-size:15px;line-height:1.35}
+.sh{font-size:13px;color:var(--muted);line-height:1.45;margin-top:6px}
+.vd{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:12px;margin-top:8px}
+.vd.risk{background:rgba(239,68,68,.15);color:#fca5a5}
+.vd.opp{background:rgba(34,197,94,.15);color:#86efac}
+.vd.neu{background:rgba(245,158,11,.15);color:#fcd34d}
+.gloss{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:16px}
+.gloss summary{cursor:pointer;font-weight:700;font-size:14px}
+.gloss dl{margin:10px 0 0;display:grid;gap:10px}
+.gloss dt{font-weight:700;font-size:13px}
+.gloss dd{margin:2px 0 0;font-size:13px;color:var(--muted);line-height:1.45}
+</style>
+
+<div class="app">
+  <header><h1>Venture<span>Pulse</span> Radar</h1><div class="badge" id="badge">Starte…</div></header>
+  <div class="err" id="err"></div>
+
+  <div id="v-main" class="view on">
+    <div class="bar">
+      <div class="grow" id="status">Der Radar scannt Weltnachrichten und Kurse automatisch.</div>
+      <button class="pill blue" onclick="scan(true)">⟳ Jetzt scannen</button>
+    </div>
+    <div class="bar">
+      <button class="pill" id="notifBtn" onclick="toggleNotif()">🔔 Warnungen einschalten</button>
+      <div class="grow" id="notifInfo"></div>
+    </div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-p="today" onclick="tab('today')">Heute</button>
+      <button class="tab" data-p="dates" onclick="tab('dates')">Termine</button>
+      <button class="tab" data-p="after" onclick="tab('after')">Wirkt nach</button>
+      <button class="tab" data-p="news" onclick="tab('news')">News</button>
+    </div>
+
+    <div class="panel on" id="p-today">
+      <div class="glance" id="glance"></div>
+      <div class="sec" id="snapTitle">Marktstand</div>
+      <div id="snap"></div>
+      <div class="sec">Auffällige Kursbewegungen</div>
+      <div id="alerts"><div class="loading">Scanne Märkte und Weltnachrichten…</div></div>
+    </div>
+
+    <div class="panel" id="p-dates">
+      <div class="muted intro">Diese Termine können Kurse bewegen. Tippe auf einen Termin, um zu lesen, was passieren könnte.</div>
+      <div id="events"></div>
+    </div>
+
+    <div class="panel" id="p-after">
+      <div class="muted intro">Diese Ereignisse liegen schon hinter uns, beeinflussen die Kurse aber noch. Stand 09.11.2026.</div>
+      <div id="after"></div>
+    </div>
+
+    <div class="panel" id="p-news">
+      <div class="muted" id="srcs" style="margin-bottom:6px"></div>
+      <div class="sec">Auf dem Radar</div>
+      <div id="radar"></div>
+      <div class="sec">Aktuelle Weltlage</div>
+      <div id="world"></div>
+    </div>
+
+    <details class="gloss"><summary>Begriffe einfach erklärt</summary><dl>
+      <dt>Leitzins</dt><dd>Der Zins der Notenbank (Fed in den USA, EZB in Europa). Steigt er, werden Kredite teurer und Aktien geraten oft unter Druck.</dd>
+      <dt>Brent</dt><dd>Die wichtigste Ölsorte für Europa. Der Preis gilt pro Fass (159 Liter).</dd>
+      <dt>Nasdaq 100, S&amp;P 500, Dow</dt><dd>Die großen US-Indizes. Sie zeigen, wie die Aktien vieler Firmen zusammen laufen.</dd>
+      <dt>RSI</dt><dd>Ein Wert von 0 bis 100. Über 70 haben schon viele gekauft („überkauft“), unter 30 haben viele verkauft („überverkauft“).</dd>
+      <dt>„Sell the news“</dt><dd>Der Kurs steigt vor einem Ereignis und fällt, sobald die Nachricht da ist, weil Anleger Gewinne mitnehmen.</dd>
+      <dt>Dot-Plot</dt><dd>Eine Grafik der Fed, in der jedes Mitglied zeigt, wo es den Leitzins erwartet.</dd>
+      <dt>Put-Kontrakte</dt><dd>Eine Art Versicherung gegen fallende Kurse. Viele davon zeigen, dass Anleger nervös sind.</dd>
+    </dl></details>
+
+    <div class="warn">Der Radar wertet öffentliche Nachrichten (Tagesschau, Spiegel, Handelsblatt, t3n) und Kursdaten (Yahoo Finance) automatisch aus. Zusammenhänge zwischen Meldung und Kurs sind <b>Hinweise, keine bewiesenen Ursachen</b>. Keine Anlageberatung.</div>
+  </div>
+
+  <div id="v-detail" class="view">
+    <button class="back" onclick="showMain()">← Zurück zum Radar</button>
+    <div id="detail"></div>
+  </div>
+</div>
+<div class="banner" id="banner"></div>
+
+<script>
+window.onerror = function(msg, src, line){
+  var e = document.getElementById('err'); if(!e) return;
+  e.style.display = 'block'; e.textContent = 'Fehler: ' + msg + ' (Zeile ' + line + ')';
+};
+
+/* ============ Konfiguration ============ */
+var FEEDS = [
+  {name:'Tagesschau', url:'https://www.tagesschau.de/wirtschaft/index~rss2.xml'},
+  {name:'Spiegel',    url:'https://www.spiegel.de/wirtschaft/index.rss'},
+  {name:'Handelsblatt', url:'https://www.handelsblatt.com/contentexport/feed/schlagzeilen'},
+  {name:'t3n',        url:'https://t3n.de/news/feed/'}
+];
+var UNIVERSE = [
+  {sym:'^GDAXI', name:'DAX', kind:'Index'},
+  {sym:'^GSPC', name:'S&P 500', kind:'Index'},
+  {sym:'^IXIC', name:'Nasdaq', kind:'Index'},
+  {sym:'CL=F', name:'Rohöl (WTI)', kind:'Rohstoff'},
+  {sym:'GC=F', name:'Gold', kind:'Rohstoff'},
+  {sym:'BTC-USD', name:'Bitcoin', kind:'Krypto'},
+  {sym:'NVDA', name:'NVIDIA', kind:'Aktie'},
+  {sym:'AAPL', name:'Apple', kind:'Aktie'},
+  {sym:'MSFT', name:'Microsoft', kind:'Aktie'},
+  {sym:'GOOGL', name:'Alphabet', kind:'Aktie'},
+  {sym:'AMZN', name:'Amazon', kind:'Aktie'},
+  {sym:'META', name:'Meta', kind:'Aktie'},
+  {sym:'TSLA', name:'Tesla', kind:'Aktie'},
+  {sym:'SAP.DE', name:'SAP', kind:'Aktie'},
+  {sym:'SIE.DE', name:'Siemens', kind:'Aktie'},
+  {sym:'VOW3.DE', name:'Volkswagen', kind:'Aktie'},
+  {sym:'RHM.DE', name:'Rheinmetall', kind:'Aktie'},
+  {sym:'DBK.DE', name:'Deutsche Bank', kind:'Aktie'},
+  {sym:'RWE.DE', name:'RWE', kind:'Aktie'},
+  {sym:'XOM', name:'ExxonMobil', kind:'Aktie'},
+  {sym:'JPM', name:'JPMorgan', kind:'Aktie'},
+  {sym:'LLY', name:'Eli Lilly', kind:'Aktie'},
+  {sym:'TTWO', name:'Take-Two (GTA)', kind:'Aktie'},
+  {sym:'SONY', name:'Sony (PlayStation)', kind:'Aktie'},
+  {sym:'AMD', name:'AMD', kind:'Aktie'}
+];
+/* Themen: Stichwörter in Meldungen -> betroffene Werte */
+var THEMES = [
+  {id:'Öl & Energie', re:/\b(öl|ölpreis|opec|erdöl|brent|erdgas|gaspreis|energiepreis|pipeline)/i, syms:['CL=F','XOM','RWE.DE']},
+  {id:'Zinsen & Notenbanken', re:/(leitzins|zinsentscheid|zinssenk|zinserhöh|\bfed\b|\bezb\b|notenbank|inflation|geldpolitik)/i, syms:['JPM','DBK.DE','^GSPC','^GDAXI','GC=F']},
+  {id:'Zölle & Handelskonflikt', re:/(zoll|zölle|handelsstreit|handelskrieg|strafzoll|exportbeschränk|sanktion)/i, syms:['^GDAXI','VOW3.DE','SIE.DE','TSLA','AAPL']},
+  {id:'Krieg & Krisen', re:/(krieg|iran|hormus|nahost|angriff|raketen|militär|rüstung|nato|waffenruhe|eskalation|geopolit)/i, syms:['RHM.DE','GC=F','CL=F','^GDAXI']},
+  {id:'Chips & KI', re:/(chip|halbleiter|taiwan|künstliche intelligenz|\bki\b|openai|rechenzentr|gpu)/i, syms:['NVDA','MSFT','GOOGL','^IXIC']},
+  {id:'Krypto', re:/(bitcoin|krypto|ethereum|stablecoin)/i, syms:['BTC-USD']},
+  {id:'Banken & Finanzsystem', re:/(bank|pleite|insolvenz|kreditausfall|schuldenkrise|rezession)/i, syms:['DBK.DE','JPM','^GDAXI','^GSPC']},
+  {id:'Auto & E-Mobilität', re:/(elektroauto|e-auto|autobauer|batterie|autoindustrie|rückruf)/i, syms:['TSLA','VOW3.DE']},
+  {id:'Pharma & Abnehmmittel', re:/(pharma|medikament|abnehm|zulassung|impfstoff)/i, syms:['LLY']},
+  {id:'US-Wirtschaft', re:/(us-wirtschaft|arbeitsmarkt|wall street|us-präsident|trump|us-haushalt|konjunktur)/i, syms:['^GSPC','^IXIC','^GDAXI']},
+  {id:'Gaming & GTA', re:/(gta|rockstar|take-two|playstation|xbox|videospiel)/i, syms:['TTWO','SONY','MSFT']},
+  {id:'Firmenmeldung', re:/(quartalszahlen|prognose angehoben|prognose gesenkt|gewinnwarnung|übernahme|aktienrückkauf|dividende)/i, syms:[]}
+];
+var DIRECT = [
+  {re:/\b(Nvidia)\b/i, sym:'NVDA'},{re:/\b(Apple|iPhone)\b/i, sym:'AAPL'},{re:/\b(Microsoft|Windows|Azure)\b/i, sym:'MSFT'},
+  {re:/\b(Google|Alphabet|YouTube)\b/i, sym:'GOOGL'},{re:/\b(Amazon|AWS)\b/i, sym:'AMZN'},{re:/\b(Meta|Facebook|Instagram|WhatsApp)\b/, sym:'META'},
+  {re:/\bTesla\b/i, sym:'TSLA'},{re:/\bSAP\b/, sym:'SAP.DE'},{re:/\bSiemens\b/i, sym:'SIE.DE'},{re:/\b(Volkswagen|VW)\b/, sym:'VOW3.DE'},
+  {re:/\bRheinmetall\b/i, sym:'RHM.DE'},{re:/\bDeutsche Bank\b/i, sym:'DBK.DE'},{re:/\bRWE\b/, sym:'RWE.DE'},
+  {re:/\b(Take-Two|Rockstar|GTA)\b/i, sym:'TTWO'},{re:/\b(Sony|PlayStation)\b/i, sym:'SONY'},{re:/\bAMD\b/, sym:'AMD'},
+  {re:/\b(Exxon|ExxonMobil)\b/i, sym:'XOM'},{re:/\bJPMorgan\b/i, sym:'JPM'},{re:/\b(Eli Lilly|Lilly)\b/i, sym:'LLY'},{re:/\bDax\b/, sym:'^GDAXI'}
+];
+var POS = ['gewinn','rekord','wächst','wachstum','übernahme','investition','durchbruch','steigt','plus','erfolg','erholt','hebt prognose','angehoben','zulassung','boom','waffenruhe','einigung','zinssenk'];
+var NEG = ['verlust','entlass','klage','strafe','hack','datenleck','sinkt','minus','einbruch','krise','insolvenz','verbot','ermittl','rückruf','warnt','stellenabbau','absturz','sanktion','zinserhöh','zoll','eskalation','angriff','gewinnwarnung','gesenkt'];
+var PROXIES = [
+  function(u){return 'https://corsproxy.io/?url=' + encodeURIComponent(u);},
+  function(u){return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u);},
+  function(u){return u;}
+];
+
+var NEWS = [], ASSETS = {}, CURRENT = null, SCANNING = false;
+
+/* ============ Helpers ============ */
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function fmt(n,d){if(d===undefined)d=2;return Number(n).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function fmtDate(t){return new Date(t).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'2-digit'});}
+function mean(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s/a.length;}
+function sg(v,d){return (v>=0?'+':'')+fmt(v,d===undefined?1:d)+' %';}
+function cls(v){return v>=0?'up':'down';}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function fetchT(url, ms){
+  return new Promise(function(res,rej){
+    var done=false, t=setTimeout(function(){if(!done){done=true;rej(new Error('timeout'));}}, ms||12000);
+    fetch(url).then(function(r){if(done)return;done=true;clearTimeout(t);res(r);}).catch(function(e){if(done)return;done=true;clearTimeout(t);rej(e);});
+  });
+}
+
+/* ============ News ============ */
+function parseRss(txt, srcName){
+  var out=[];
+  try{
+    var doc=new DOMParser().parseFromString(txt,'text/xml');
+    var items=doc.getElementsByTagName('item');
+    if(!items.length) items=doc.getElementsByTagName('entry');
+    for(var i=0;i<items.length&&i<25;i++){
+      var it=items[i];
+      var g=function(tag){var e=it.getElementsByTagName(tag)[0]; return e?(e.textContent||''):'';};
+      var link=g('link'); var le=it.getElementsByTagName('link')[0];
+      if(le && le.getAttribute('href')) link=le.getAttribute('href');
+      var tmp=document.createElement('div'); tmp.innerHTML=g('description')||g('summary')||g('content');
+      var dt=new Date(g('pubDate')||g('updated')||g('published')||Date.now()).getTime();
+      out.push({title:g('title').trim(), snippet:(tmp.textContent||'').replace(/\s+/g,' ').trim().slice(0,300), link:link.trim(), source:srcName, date:isNaN(dt)?Date.now():dt});
+    }
+  }catch(e){}
+  return out.filter(function(x){return x.title;});
+}
+function tryRaw(f,i){
+  var P=[PROXIES[0],PROXIES[1]];
+  if(i>=P.length) return Promise.resolve([]);
+  return fetchT(P[i](f.url),12000).then(function(r){return r.text();}).then(function(t){
+    var o=parseRss(t,f.name); if(!o.length) throw new Error('leer'); return o;
+  }).catch(function(){return tryRaw(f,i+1);});
+}
+function fetchFeed(f){
+  return fetchT('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(f.url),12000)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.status!=='ok'||!d.items||!d.items.length) throw new Error('rss2json');
+      return d.items.map(function(i){
+        var tmp=document.createElement('div'); tmp.innerHTML=i.description||'';
+        var dt=new Date(String(i.pubDate).replace(' ','T')+'Z').getTime();
+        return {title:i.title, snippet:(tmp.textContent||'').replace(/\s+/g,' ').trim().slice(0,300), link:i.link, source:f.name, date:isNaN(dt)?Date.now():dt};
+      });
+    })
+    .catch(function(){return tryRaw(f,0);});
+}
+function loadNews(){
+  var all=[], status=[];
+  return Promise.all(FEEDS.map(function(f){
+    return fetchFeed(f).then(function(items){ status.push(f.name+(items.length?' ✓':' ✗')); items.forEach(function(i){all.push(i);}); });
+  })).then(function(){
+    all.sort(function(a,b){return b.date-a.date;});
+    var seen={}; NEWS=all.filter(function(n){var k=n.title.slice(0,40); if(seen[k])return false; seen[k]=1; return true;}).slice(0,80);
+    NEWS.forEach(tagNews);
+    var el=$('srcs'); if(el) el.textContent='Nachrichtenquellen: '+status.join(' · ')+(NEWS.length?'':' – Live-Nachrichten gerade nicht erreichbar, Hintergrundlage unten bleibt sichtbar.');
+    return NEWS.length;
+  });
+}
+function loadNewsOld(){
+  var all = [];
+  return Promise.all(FEEDS.map(function(f){
+    return fetchT('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(f.url), 12000)
+      .then(function(r){return r.json();})
+      .then(function(d){ if(d.status==='ok'){ d.items.forEach(function(i){
+          var tmp=document.createElement('div'); tmp.innerHTML=i.description||'';
+          var snip=(tmp.textContent||'').replace(/\s+/g,' ').trim();
+          all.push({title:i.title, snippet:snip, link:i.link, source:f.name, date:new Date(String(i.pubDate).replace(' ','T')).getTime()||Date.now()});
+      });}})
+      .catch(function(){});
+  })).then(function(){
+    all.sort(function(a,b){return b.date-a.date;});
+    // Duplikate entfernen
+    var seen={}; NEWS = all.filter(function(n){var k=n.title.slice(0,40); if(seen[k])return false; seen[k]=1; return true;}).slice(0,60);
+    NEWS.forEach(tagNews);
+    return NEWS.length;
+  });
+}
+function sentimentOf(text){
+  var t=text.toLowerCase(), s=0, i;
+  for(i=0;i<POS.length;i++) if(t.indexOf(POS[i])>-1) s++;
+  for(i=0;i<NEG.length;i++) if(t.indexOf(NEG[i])>-1) s--;
+  return s;
+}
+function tagNews(n){
+  var text = n.title+' '+n.snippet; n.themes=[]; n.syms=[];
+  THEMES.forEach(function(th){ if(th.re.test(text)){ n.themes.push(th.id); th.syms.forEach(function(s){ if(n.syms.indexOf(s)<0) n.syms.push(s);}); }});
+  DIRECT.forEach(function(d){ if(d.re.test(text) && n.syms.indexOf(d.sym)<0) n.syms.push(d.sym); });
+  n.sent = sentimentOf(text);
+}
+
+/* ============ Kurse ============ */
+function fetchYahoo(sym, range){
+  var url='https://query1.finance.yahoo.com/v8/finance/chart/'+encodeURIComponent(sym)+'?range='+range+'&interval=1d';
+  var i=0;
+  function next(){
+    if(i>=PROXIES.length) return Promise.resolve(null);
+    var p=PROXIES[i++];
+    return fetchT(p(url), 10000).then(function(r){ if(!r.ok) throw new Error('http'); return r.json(); })
+      .then(function(j){
+        var res=j.chart&&j.chart.result&&j.chart.result[0]; if(!res) throw new Error('empty');
+        var ts=res.timestamp, cl=res.indicators.quote[0].close, pts=[];
+        for(var k=0;k<ts.length;k++) if(cl[k]!=null) pts.push({t:ts[k]*1000,c:cl[k]});
+        if(pts.length<10) throw new Error('short');
+        return {pts:pts, currency:res.meta.currency||'', live:true};
+      }).catch(function(){return next();});
+  }
+  return next();
+}
+function stats(pts){
+  var c=pts.map(function(p){return p.c;}), n=c.length;
+  var last=c[n-1], prev=c[n-2], day=(last/prev-1)*100;
+  var r=[]; for(var i=Math.max(1,n-61);i<n;i++) r.push(Math.log(c[i]/c[i-1])*100);
+  var m=mean(r), sd=Math.sqrt(mean(r.map(function(x){return (x-m)*(x-m);}))) || 0.01;
+  var d5 = n>5 ? (last/c[n-6]-1)*100 : 0;
+  var d20 = n>21 ? (last/c[n-22]-1)*100 : 0;
+  return {last:last, day:day, z:Math.abs(day)/sd, sd:sd, d5:d5, d20:d20, lastT:pts[n-1].t};
+}
+
+/* ============ Scan ============ */
+function scan(manual){
+  if(SCANNING) return; SCANNING=true;
+  $('badge').textContent='Scanne…';
+  $('status').textContent='Lade Nachrichten und Kurse…';
+  var queue=UNIVERSE.slice(), ok=0, fail=0;
+  function worker(){
+    var a=queue.shift(); if(!a) return Promise.resolve();
+    return fetchYahoo(a.sym,'3mo').then(function(d){
+      if(d){ ok++; ASSETS[a.sym]={meta:a, data:d, st:stats(d.pts)}; } else fail++;
+      return worker();
+    });
+  }
+  return loadNews().then(function(nn){
+    return Promise.all([worker(),worker(),worker(),worker()]).then(function(){
+      SCANNING=false;
+      var now=new Date();
+      $('status').textContent='Letzter Scan: '+now.toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr · '+nn+' Meldungen · '+ok+'/'+UNIVERSE.length+' Kurse';
+      $('badge').textContent=ok>0?'LIVE':'SCHNAPPSCHUSS';
+      render(ok, nn);
+    });
+  }).catch(function(e){SCANNING=false; $('status').textContent='Scan fehlgeschlagen: '+e.message;});
+}
+
+function relatedNews(sym){
+  return NEWS.filter(function(n){return n.syms.indexOf(sym)>-1;});
+}
+function render(ok, nn){
+  var list = Object.keys(ASSETS).map(function(k){
+    var a=ASSETS[k], rel=relatedNews(k);
+    var relSent=0; rel.forEach(function(n){relSent+=n.sent;});
+    return {sym:k, meta:a.meta, st:a.st, rel:rel, relSent:relSent};
+  });
+
+  // 1) Auffällig: starke Bewegung (z >= 2 oder |Tag| >= 4 %) oder Bewegung + passende Meldungen
+  var alerts = list.filter(function(x){
+    return x.st.z>=2 || Math.abs(x.st.day)>=4 || (x.st.z>=1.3 && x.rel.length>=2) || Math.abs(x.st.d5)>=10;
+  }).sort(function(a,b){return (b.st.z+b.rel.length*0.3)-(a.st.z+a.rel.length*0.3);}).slice(0,8);
+
+  var h='';
+  if(!ok){ h='<div class="card"><div class="muted">Keine Live-Kurse verfügbar, daher keine automatische Auffälligkeitssuche. Siehe Schnappschuss unten.</div></div>'; }
+  else if(!alerts.length){ h='<div class="card"><div class="muted">Heute keine außergewöhnlichen Kursbewegungen bei den überwachten Werten. Der Radar prüft weiter, solange die Seite offen ist.</div></div>'; }
+  alerts.forEach(function(x){ h+=card(x,true); });
+  $('alerts').innerHTML=h;
+
+  // 2) Radar: Nachrichtenlage ohne große Bewegung
+  var alertSyms=alerts.map(function(x){return x.sym;});
+  var radar=list.filter(function(x){return alertSyms.indexOf(x.sym)<0 && x.rel.length>=1;})
+    .sort(function(a,b){return b.rel.length-a.rel.length;}).slice(0,6);
+  h=''; radar.forEach(function(x){h+=card(x,false);});
+  if(!radar.length) h='<div class="card"><div class="muted">Aktuell keine Meldungen mit klarem Bezug zu überwachten Werten.</div></div>';
+  $('radar').innerHTML=h;
+
+  // 3) Weltlage
+  var world=NEWS.filter(function(n){return n.themes.length>0;}).slice(0,8);
+  h=''; world.forEach(function(n){
+    h+='<div class="card"><div class="muted">'+esc(n.source)+' · '+new Date(n.date).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+'</div>'
+     +'<div style="font-size:14px;font-weight:600;margin:4px 0">'+esc(n.title)+'</div>'
+     +n.themes.map(function(t){return '<span class="tag y">'+esc(t)+'</span>';}).join('')
+     +n.syms.slice(0,4).map(function(s){var m=ASSETS[s]; return m?'<span class="tag" onclick="openAsset(\''+s+'\')" style="cursor:pointer">'+esc(m.meta.name)+'</span>':'';}).join('')
+     +'</div>';
+  });
+  if(!world.length) h='<div class="card"><div class="muted">Keine marktrelevanten Meldungen gefunden.</div></div>';
+  $('world').innerHTML=h;
+
+  renderEvents();
+  renderSnap(ok>0 && nn>0);
+  notifyNew(alerts);
+}
+function card(x, isAlert){
+  var s=x.st, up=s.day>=0;
+  var mood = x.relSent>0?'eher positiv':(x.relSent<0?'eher negativ':'offen');
+  var why='';
+  if(isAlert){
+    why='<b>'+(Math.abs(s.day)>=4?'Starke Bewegung':'Auffällige Bewegung')+':</b> '+sg(s.day)+' zum Vortag, das ist das '+fmt(s.z,1)+'-Fache der üblichen Tagesschwankung. 5 Tage: '+sg(s.d5)+'.';
+    if(x.rel.length) why+=' Passende Meldungen ('+x.rel.length+') könnten ein Hinweis auf den Auslöser sein.';
+    else why+=' Keine passende Meldung gefunden – möglicherweise Marktstimmung oder Unternehmensnachricht.';
+  } else {
+    why='<b>Nachrichtenlage '+mood+'</b> ('+x.rel.length+' Meldung'+(x.rel.length>1?'en':'')+'). Kurs bisher ruhig ('+sg(s.day)+' heute) – bei Eskalation könnte sich das ändern.';
+  }
+  var hl=x.rel.slice(0,2).map(function(n){return '<div class="hl">📰 '+esc(n.title)+' <span style="opacity:.6">('+esc(n.source)+')</span></div>';}).join('');
+  return '<div class="card tap '+(isAlert?(up?'hotup':'hot'):'')+'" onclick="openAsset(\''+x.sym+'\')">'
+    +'<div class="row"><div><span class="name">'+esc(x.meta.name)+'</span><span class="sym">'+esc(x.sym)+'</span></div><div class="chg '+cls(s.day)+'">'+sg(s.day)+'</div></div>'
+    +'<span class="tag">'+esc(x.meta.kind)+'</span>'
+    +'<div class="why">'+why+'</div>'+hl
+    +'<div class="muted" style="margin-top:8px;color:#38bdf8">Tippen für Chart, Prognose & Fazit →</div></div>';
+}
+
+/* ============ Benachrichtigungen ============ */
+function showBanner(msg){
+  var b=$('banner'); b.innerHTML='🔔 '+esc(msg); b.style.display='block';
+  if(navigator.vibrate) try{navigator.vibrate(200);}catch(e){}
+  setTimeout(function(){b.style.display='none';},8000);
+}
+function enableNotif(){
+  if(typeof Notification==='undefined'){
+    lsSet('vp_notif','1'); updateNotifUi();
+    $('notifInfo').textContent='Dein Browser unterstützt keine System-Mitteilungen. Warnungen erscheinen als Banner in der App.'; return;
+  }
+  Notification.requestPermission().then(function(p){ lsSet('vp_notif','1'); updateNotifUi(); });
+}
+function updateNotifUi(){
+  var on=lsGet('vp_notif')==='1';
+  var sys=(typeof Notification!=='undefined' && Notification.permission==='granted');
+  $('notifBtn').textContent=on?'🔕 Warnungen ausschalten':'🔔 Warnungen einschalten';
+  $('notifInfo').textContent=on?(sys?'Aktiv (Mitteilung + Banner, nur solange die Seite offen ist). Zum Beenden erneut tippen.':'Aktiv (Banner, nur solange die Seite offen ist). Zum Beenden erneut tippen.'):'Aus. Tippen, um bei auffälligen Bewegungen und nahen Terminen gewarnt zu werden.';
+}
+function toggleNotif(){
+  if(lsGet('vp_notif')==='1'){ lsSet('vp_notif','0'); updateNotifUi(); showBanner('Warnungen sind jetzt ausgeschaltet.'); }
+  else enableNotif();
+}
+function notifyNew(alerts){
+  if(lsGet('vp_notif')!=='1') return;
+  var day=new Date().toISOString().slice(0,10), seen={};
+  try{seen=JSON.parse(lsGet('vp_seen')||'{}');}catch(e){}
+  var fresh=alerts.filter(function(x){return Math.abs(x.st.day)>=3 && !seen[day+x.sym];});
+  if(!fresh.length) return;
+  fresh.forEach(function(x){seen[day+x.sym]=1;});
+  lsSet('vp_seen',JSON.stringify(seen));
+  var top=fresh[0];
+  var msg=top.meta.name+' '+sg(top.st.day)+(fresh.length>1?' (+'+(fresh.length-1)+' weitere auffällige Werte)':'');
+  showBanner(msg);
+  if(typeof Notification!=='undefined' && Notification.permission==='granted'){
+    try{new Notification('VenturePulse Radar',{body:msg});}catch(e){}
+  }
+}
+
+/* ============ Detail ============ */
+function showMain(){ $('v-detail').classList.remove('on'); $('v-main').classList.add('on'); }
+function openAsset(sym){
+  var a=ASSETS[sym]; if(!a){ showBanner('Kursdaten für '+sym+' sind noch nicht geladen – bitte „Jetzt scannen“ tippen.'); return; }
+  $('v-main').classList.remove('on'); $('v-detail').classList.add('on'); window.scrollTo(0,0);
+  $('detail').innerHTML='<div class="box"><div class="loading">Lade Jahresverlauf für '+esc(a.meta.name)+'…</div></div>';
+  fetchYahoo(sym,'1y').then(function(d){
+    var live=true;
+    if(!d){ d={pts:a.data.pts, currency:a.data.currency, live:true}; }
+    renderDetail(a.meta, d, relatedNews(sym));
+  });
+}
+function rsi(c){var n=14,g=0,l=0;for(var i=c.length-n;i<c.length;i++){var d=c[i]-c[i-1];if(d>0)g+=d;else l-=d;} if(l===0)return 100; return 100-100/(1+(g/n)/(l/n));}
+function sma(c,n){return c.length>=n?mean(c.slice(-n)):null;}
+function forecast(pts){
+  var L=Math.min(40,pts.length), c=pts.slice(-L).map(function(p){return p.c;}), xs=c.map(function(_,i){return i;});
+  var mx=mean(xs), my=mean(c), num=0, den=0;
+  xs.forEach(function(x,i){num+=(x-mx)*(c[i]-my);den+=(x-mx)*(x-mx);});
+  var slope=num/den, ic=my-slope*mx;
+  var sd=Math.sqrt(mean(c.map(function(v,i){var r=v-(ic+slope*i);return r*r;})));
+  var last=pts[pts.length-1], out=[{t:last.t,c:last.c,lo:last.c,hi:last.c}], t=last.t, k=0;
+  while(k<10){ t+=86400000; var dw=new Date(t).getDay(); if(dw===0||dw===6) continue; k++;
+    var b=last.c+slope*k, band=sd*Math.sqrt(1+k/4); out.push({t:t,c:b,lo:b-band,hi:b+band}); }
+  return out;
+}
+function analyze(pts, fc, rel){
+  var c=pts.map(function(p){return p.c;}), n=c.length, last=c[n-1];
+  var m1=n>21?(last/c[n-22]-1)*100:null, m3=n>63?(last/c[n-64]-1)*100:null, m6=n>126?(last/c[n-127]-1)*100:null;
+  var s20=sma(c,20), s50=sma(c,50), r=rsi(c);
+  var rr=[];for(var i=1;i<n;i++)rr.push(Math.log(c[i]/c[i-1]));
+  var m=mean(rr), vol=Math.sqrt(mean(rr.map(function(x){return (x-m)*(x-m);})))*Math.sqrt(252)*100;
+  var hi=Math.max.apply(null,c), lo=Math.min.apply(null,c), pos=(last-lo)/(hi-lo)*100;
+  var fcEnd=fc[fc.length-1].c, fcPct=(fcEnd/last-1)*100;
+  var sent=0; rel.forEach(function(x){sent+=x.sent;});
+  var score=0, why=[];
+  if(m1!==null){ if(m1>3){score++;why.push('Im letzten Monat '+sg(m1)+': positives Momentum.');} else if(m1<-3){score--;why.push('Im letzten Monat '+sg(m1)+': negatives Momentum.');} else why.push('Letzter Monat seitwärts ('+sg(m1)+').'); }
+  if(s20&&s50){ if(s20>s50){score++;why.push('20-Tage-Schnitt über 50-Tage-Schnitt: Aufwärtssignal.');} else {score--;why.push('20-Tage-Schnitt unter 50-Tage-Schnitt: Abwärtssignal.');} }
+  if(r>70){score--;why.push('RSI '+fmt(r,0)+': überkauft, Rücksetzer wahrscheinlicher.');} else if(r<30){score++;why.push('RSI '+fmt(r,0)+': überverkauft, Erholung möglich.');} else why.push('RSI '+fmt(r,0)+': neutral.');
+  if(fcPct>1.5){score++;why.push('Trend-Prognose: ca. '+sg(fcPct)+' in 10 Handelstagen.');} else if(fcPct<-1.5){score--;why.push('Trend-Prognose: ca. '+sg(fcPct)+' in 10 Handelstagen.');} else why.push('Trend-Prognose kurzfristig flach.');
+  if(sent>0){score++;why.push('Verknüpfte Nachrichten sind überwiegend positiv.');} else if(sent<0){score--;why.push('Verknüpfte Nachrichten sind überwiegend negativ.');}
+  why.push(vol>45?'Hohe Schwankung ('+fmt(vol,0)+' % p. a.): erhöhtes Risiko.':'Schwankung '+fmt(vol,0)+' % p. a.');
+  var lvl,title,text;
+  if(score>=2){lvl='pos';title='🟢 Positiver Trend – genauer ansehen lohnt sich';text='Mehrere Signale zeigen nach oben.';}
+  else if(score<=-2){lvl='neg';title='🔴 Vorsicht – erhöhtes Rücksetzer-Risiko';text='Mehrere Signale sprechen gegen einen Einstieg.';}
+  else {lvl='neu';title='🟡 Neutral – abwarten und beobachten';text='Die Signale sind gemischt.';}
+  return {last:last,m1:m1,m3:m3,m6:m6,r:r,vol:vol,hi:hi,lo:lo,pos:pos,fcEnd:fcEnd,fcPct:fcPct,score:score,why:why,lvl:lvl,title:title,text:text};
+}
+function renderDetail(meta, d, rel){
+  var fc=forecast(d.pts), an=analyze(d.pts, fc, rel);
+  CURRENT={meta:meta, d:d, fc:fc, range:'3M'};
+  var prev=d.pts[d.pts.length-2].c, day=(an.last/prev-1)*100;
+  var meter=Math.max(3,Math.min(97,50+an.score*16));
+  var q=encodeURIComponent(meta.name);
+  function kp(l,v,c){return '<div class="kpi"><small>'+l+'</small><b class="'+(c||'')+'">'+v+'</b></div>';}
+  var news=rel.slice(0,4).map(function(n){return '<div class="card"><div class="muted">'+esc(n.source)+'</div><div style="font-size:13px;font-weight:600;margin:3px 0">'+esc(n.title)+'</div><a href="'+esc(n.link)+'" target="_blank" rel="noopener" style="color:#38bdf8;font-size:12px">Artikel öffnen ↗</a></div>';}).join('');
+  $('detail').innerHTML='<div class="box">'
+    +'<h2>'+esc(meta.name)+' <span class="sym">'+esc(meta.sym)+'</span></h2>'
+    +'<div class="price"><b>'+fmt(an.last)+' '+esc(d.currency)+'</b><span class="chg '+cls(day)+'" style="font-size:15px">'+sg(day)+'</span></div>'
+    +'<div class="ranges">'+['1M','3M','6M','1J'].map(function(r){return '<button class="rg '+(r==='3M'?'on':'')+'" data-r="'+r+'" onclick="setRange(\''+r+'\')">'+r+'</button>';}).join('')+'</div>'
+    +'<div class="chartbox" id="chart"></div>'
+    +'<div class="legend"><i style="background:#22c55e"></i>Kursverlauf (echt) &nbsp; <i style="background:#38bdf8"></i>Trend-Prognose 10 Handelstage &nbsp; <i style="background:#38bdf8;opacity:.3"></i>Schwankungsbreite</div>'
+    +'<div class="sec">Kennzahlen</div><div class="grid">'
+    +kp('1 Monat',an.m1===null?'–':sg(an.m1),an.m1>=0?'up':'down')+kp('3 Monate',an.m3===null?'–':sg(an.m3),an.m3>=0?'up':'down')
+    +kp('6 Monate',an.m6===null?'–':sg(an.m6),an.m6>=0?'up':'down')+kp('Prognose 10 Tage',sg(an.fcPct)+' → '+fmt(an.fcEnd),cls(an.fcPct))
+    +kp('Spanne (1 Jahr)',fmt(an.lo)+' – '+fmt(an.hi))+kp('Position in Spanne',fmt(an.pos,0)+' %')
+    +kp('RSI (14 Tage)',fmt(an.r,0))+kp('Schwankung p. a.',fmt(an.vol,0)+' %')
+    +'</div>'
+    +'<div class="sec">Fazit & Empfehlung</div>'
+    +'<div class="reco '+an.lvl+'"><h4>'+an.title+'</h4><div style="font-size:13px">'+an.text+'</div>'
+    +'<div class="meter"><i style="left:'+meter+'%"></i></div><div class="mlabels"><span>Vorsicht</span><span>Neutral</span><span>Positiv</span></div>'
+    +'<ul>'+an.why.map(function(w){return '<li>'+esc(w)+'</li>';}).join('')+'</ul></div>'
+    +(news?'<div class="sec">Verknüpfte Meldungen</div>'+news:'')
+    +'<div class="sec">Weiterführende Links</div><div class="links">'
+    +'<a target="_blank" rel="noopener" href="https://www.capital.de/boerse-aktien">📈 Börse & Aktien auf Capital.de ↗</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.finanzen.net/suchergebnis.asp?_search='+q+'">📊 '+esc(meta.name)+' auf Finanzen.net ↗</a>'
+    +'<a target="_blank" rel="noopener" href="https://finance.yahoo.com/quote/'+encodeURIComponent(meta.sym)+'">🌐 Chart auf Yahoo Finance ↗</a></div>'
+    +'<div class="warn">Die Prognose ist eine einfache Trendfortschreibung (lineare Regression, 40 Handelstage), keine Vorhersage. Die Empfehlung beruht auf Kennzahlen und Schlüsselwörtern der Meldungen. <b>Keine Anlageberatung.</b></div>'
+    +'</div>';
+  drawChart();
+}
+function setRange(r){ CURRENT.range=r; var b=document.querySelectorAll('.rg'); for(var i=0;i<b.length;i++) b[i].className='rg'+(b[i].getAttribute('data-r')===r?' on':''); drawChart(); }
+function drawChart(){
+  var C=CURRENT, days={'1M':22,'3M':66,'6M':132,'1J':260}[C.range];
+  var hist=C.d.pts.slice(-days), fc=C.fc, W=600,H=260,pl=8,pr=56,pt=12,pb=22;
+  var vals=hist.map(function(p){return p.c;}).concat(fc.map(function(p){return p.hi;}),fc.map(function(p){return p.lo;}));
+  var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals), pad=(mx-mn)*.08; mn-=pad; mx+=pad;
+  var t0=hist[0].t, t1=fc[fc.length-1].t;
+  function X(t){return pl+(t-t0)/(t1-t0)*(W-pl-pr);} function Y(v){return pt+(1-(v-mn)/(mx-mn))*(H-pt-pb);}
+  var col=hist[hist.length-1].c>=hist[0].c?'#22c55e':'#ef4444', s='<svg id="svg" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+  s+='<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+col+'" stop-opacity=".28"/><stop offset="1" stop-color="'+col+'" stop-opacity="0"/></linearGradient></defs>';
+  for(var i=0;i<=4;i++){var v=mn+(mx-mn)*i/4,y=Y(v); s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+y+'" y2="'+y+'" stroke="#1e293b"/><text x="'+(W-pr+6)+'" y="'+(y+4)+'" fill="#94a3b8" font-size="11">'+fmt(v,v<10?2:0)+'</text>';}
+  for(i=0;i<=3;i++){var t=t0+(t1-t0)*i/3; s+='<text x="'+X(t)+'" y="'+(H-6)+'" fill="#94a3b8" font-size="10" text-anchor="'+(i===0?'start':i===3?'end':'middle')+'">'+fmtDate(t)+'</text>';}
+  var line=hist.map(function(p,i){return (i?'L':'M')+X(p.t).toFixed(1)+' '+Y(p.c).toFixed(1);}).join(' ');
+  s+='<path d="'+line+' L '+X(hist[hist.length-1].t)+' '+(H-pb)+' L '+X(hist[0].t)+' '+(H-pb)+' Z" fill="url(#g)"/><path d="'+line+'" fill="none" stroke="'+col+'" stroke-width="2.2" stroke-linejoin="round"/>';
+  var up=fc.map(function(p,i){return (i?'L':'M')+X(p.t).toFixed(1)+' '+Y(p.hi).toFixed(1);}).join(' ');
+  var lo=fc.slice().reverse().map(function(p){return 'L'+X(p.t).toFixed(1)+' '+Y(p.lo).toFixed(1);}).join(' ');
+  s+='<path d="'+up+' '+lo+' Z" fill="#38bdf8" fill-opacity=".14"/>';
+  s+='<path d="'+fc.map(function(p,i){return (i?'L':'M')+X(p.t).toFixed(1)+' '+Y(p.c).toFixed(1);}).join(' ')+'" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-dasharray="6 4"/>';
+  s+='<line x1="'+X(fc[0].t)+'" x2="'+X(fc[0].t)+'" y1="'+pt+'" y2="'+(H-pb)+'" stroke="#475569" stroke-dasharray="3 3"/><text x="'+(X(fc[0].t)+4)+'" y="'+(pt+10)+'" fill="#94a3b8" font-size="10">heute</text>';
+  s+='<line id="xh" y1="'+pt+'" y2="'+(H-pb)+'" stroke="#94a3b8" style="display:none"/><circle id="xc" r="4" fill="#fff" style="display:none"/></svg><div class="tip" id="tip"></div>';
+  $('chart').innerHTML=s;
+  var svg=$('svg'),tip=$('tip'),xh=$('xh'),xc=$('xc');
+  var pts=hist.map(function(p){return {t:p.t,c:p.c,f:false};}).concat(fc.slice(1).map(function(p){return {t:p.t,c:p.c,f:true};}));
+  function move(ev){
+    var r=svg.getBoundingClientRect(), cx=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left, x=cx/r.width*W, best=pts[0], bd=1e9;
+    pts.forEach(function(p){var d=Math.abs(X(p.t)-x); if(d<bd){bd=d;best=p;}});
+    xh.setAttribute('x1',X(best.t)); xh.setAttribute('x2',X(best.t)); xh.style.display='';
+    xc.setAttribute('cx',X(best.t)); xc.setAttribute('cy',Y(best.c)); xc.style.display='';
+    tip.style.display='block'; tip.innerHTML=fmtDate(best.t)+' · <b>'+fmt(best.c)+' '+esc(C.d.currency)+'</b>'+(best.f?' <span style="color:#38bdf8">(Prognose)</span>':'');
+  }
+  var box=$('chart'); box.onmousemove=move; box.ontouchmove=move; box.ontouchstart=move;
+}
+
+/* ============ Ereignisse (Hintergrundlage, Stand 09.11.2026) ============ */
+var EVENTS = [
+  {id:'nvda-q3', at:'2026-11-17T22:00:00+01:00', title:'Nvidia legt Quartalszahlen vor (Q3 GJ 2027)', syms:['NVDA','AMD','^IXIC','SAP.DE'], conf:'mittel',
+   note:'Der Termin wird je nach Quelle um den 17.–19.11. genannt – bitte auf investor.nvidia.com prüfen.',
+   exp:'Nvidia stellt für das Quartal rund 108 Mrd. $ Umsatz in Aussicht. Die Erwartungen sind sehr hoch. In 6 der letzten 10 Berichte fiel die Aktie am Folgetag, z. B. etwa −8,5 % im Februar 2025 trotz starkem Wachstum. <b>Vermutung:</b> kurzfristig große Schwankung (mehrere Prozent), Richtung offen, leichte Tendenz zu „Sell the news“. Nach dem Chip-Ausverkauf vom 05.11. und dem Spionageverdacht ist die Nervosität erhöht. Zieht Nvidia den Sektor mit, bewegen sich auch AMD, Nasdaq und SAP.'},
+  {id:'gta6', at:'2026-11-19T00:00:00+01:00', title:'GTA 6 erscheint (PS5 & Xbox Series X|S, keine PC-Version)', syms:['TTWO','SONY','MSFT'], conf:'mittel',
+   note:'Take-Two hat den 19.11.2026 in seinem Geschäftsbericht vom 21.05. bestätigt. Eine erneute kurzfristige Verschiebung gilt als unwahrscheinlich, ist aber nie ausgeschlossen.',
+   exp:'<b>Vermutete Kursreaktion Take-Two:</b> Vor dem Release steigen Erwartungen oft schon im Kurs („Buy the rumor“). Rund um den Launch sind Gewinnmitnahmen typisch („Sell the news“). Entscheidend sind Verkaufszahlen der ersten 24–72 Stunden, Bewertungen und Serverstabilität. <b>Szenarien:</b> Rekordzahlen → Kurssprung möglich; Pannen oder Verschiebung → deutlicher Rückschlag. <b>Sony/Microsoft:</b> profitieren indirekt über Konsolen-Verkäufe und Abos, der Effekt ist meist kleiner.'},
+  {id:'thanks', at:'2026-11-26T15:30:00+01:00', title:'US-Feiertag Thanksgiving – US-Börsen geschlossen, am 27.11. Black Friday (verkürzter Handel)', syms:['AMZN','AAPL'], conf:'niedrig',
+   note:'', exp:'Das Konsumklima rund um Black Friday ist ein Stimmungsindikator für Händler und Tech-Konzerne (Amazon, Apple). Dünne Umsätze am Handelstag können Kurssprünge verstärken.'},
+  {id:'fed-dec', at:'2026-12-09T20:00:00+01:00', title:'Fed-Zinsentscheid mit neuen Prognosen (Dot-Plot), 8.–9.12.', syms:['JPM','DBK.DE','^GSPC','^IXIC','GC=F'], conf:'mittel',
+   note:'', exp:'Die Fed hat im September erstmals seit 2023 auf 3,75–4,00 % erhöht; der Dot-Plot deutete für Dezember eine weitere Erhöhung um 0,25 Prozentpunkte an. <b>Vermutung:</b> Bestätigt die Fed den Kurs wie erwartet, ist wenig Überraschung eingepreist. Ein schärferer Ton belastet Tech- und Wachstumswerte sowie Gold, Banken können profitieren. Ein Verzicht auf die Erhöhung wäre ein positives Überraschungssignal für Aktien.'},
+  {id:'cpi-dec', at:'2026-12-10T14:30:00+01:00', title:'US-Inflationsdaten für November (einen Tag nach der Fed)', syms:['^GSPC','^IXIC','GC=F'], conf:'niedrig',
+   note:'', exp:'Hohe Inflation stärkt die Zinserhöhungs-Erwartungen und belastet Aktien, niedrigere Zahlen wirken entlastend.'},
+  {id:'ecb-dec', at:'2026-12-17T14:15:00+01:00', title:'EZB-Zinsentscheid (und Bank of England)', syms:['DBK.DE','^GDAXI'], conf:'niedrig',
+   note:'Termin laut Notenbank-Terminlisten; Analysten (LBBW) rechnen mit einer EZB-Anhebung ab Dezember.',
+   exp:'Eine Zinserhöhung stützt tendenziell Bankaktien und kann den Euro stärken, belastet aber zinsempfindliche Branchen und exportlastige DAX-Werte.'}
+];
+var AFTER = [
+  {title:'Iran-Konflikt & Straße von Hormus: Ölpreis fällt so stark wie seit April 2020 nicht', when:'seit Wochen, zuletzt 06.–09.11.', syms:['CL=F','XOM','RWE.DE','^GDAXI','RHM.DE','GC=F'],
+   exp:'Brent ist von über 100 $ auf rund 94–96 $ gefallen, getrieben von Hoffnung auf Diplomatie. Das stützt DAX und Verbraucher. Droht die Lage zu eskalieren (US-Träger vor Iran, Drohungen), kann der Ölpreis schnell wieder steigen – das würde Ölwerte, Rüstung (Rheinmetall) und Gold stützen und den DAX belasten.'},
+  {title:'Chip- und KI-Ausverkauf am 05.11., kräftige Erholung am 06./09.11.', when:'05.–09.11.', syms:['NVDA','AMD','^IXIC','MSFT'],
+   exp:'Chiptitel verloren teils zweistellig, am Montag sprang der Nasdaq 100 um rund 3 %. Nvidia steht zusätzlich wegen eines Spionageverdachts unter Druck. Das Umfeld bleibt nervös: Tagesbewegungen von 5 % und mehr sind bei Chipwerten derzeit nicht ungewöhnlich.'},
+  {title:'Fed-Zinserhöhung im September (3,75–4,00 %), Dezember-Erhöhung eingepreist', when:'16.09.2026', syms:['JPM','DBK.DE','^GSPC','GC=F'],
+   exp:'Höhere Zinsen wirken noch nach: Sie belasten Wachstumsaktien, stützen Bankmargen und verteuern Kredite. Der Markt achtet nun auf jedes Signal zur Dezember-Sitzung.'},
+  {title:'Rekord-Absicherung im DAX: über 900.000 Put-Kontrakte am Freitag, so viele wie seit April 2025 nicht', when:'06.11.2026', syms:['^GDAXI'],
+   exp:'Viele Anleger sichern sich gegen Kursverluste ab. Das kann Abstürze dämpfen, zeigt aber hohe Nervosität. Der DAX liegt aktuell um 26.000 Punkte.'},
+  {title:'Unicredit meldet Rekordgewinn und erwägt schnellere Fusion von Commerzbank und HVB', when:'09.11.2026', syms:['DBK.DE','JPM'],
+   exp:'Konsolidierungsfantasie im europäischen Bankensektor kann Bankaktien stützen.'},
+  {title:'US-Zwischenwahlen: Trump zweifelt das Ergebnis an', when:'03.–09.11.2026', syms:['^GSPC','^IXIC'],
+   exp:'Politische Unsicherheit, die Börse reagierte am 09.11. dennoch klar positiv (Dow +~900 Punkte). Bei einer Eskalation des Streits ist mehr Schwankung möglich.'}
+];
+function chipsFor(syms){
+  return syms.map(function(s){
+    var a=ASSETS[s]; var label=a?a.meta.name+' '+sg(a.st.day):s;
+    var c=a?(a.st.day>=0?'up':'down'):'';
+    return '<span class="mini '+c+'" onclick="openAsset(\''+s+'\')">'+esc(label)+'</span>';
+  }).join('');
+}
+function tab(p){
+  var t=document.querySelectorAll('.tab'),i;
+  for(i=0;i<t.length;i++) t[i].className='tab'+(t[i].getAttribute('data-p')===p?' on':'');
+  var ps=document.querySelectorAll('.panel');
+  for(i=0;i<ps.length;i++) ps[i].className='panel'+(ps[i].id==='p-'+p?' on':'');
+  window.scrollTo(0,0);
+}
+var EV_META={
+  'nvda-q3':{short:'Zahlen des wichtigsten KI-Chipkonzerns. Sie bewegen oft den ganzen Technologie-Markt.',vd:'risk',vt:'Starke Schwankung erwartet'},
+  'gta6':{short:'Der größte Spielestart des Jahres. Die Aktie von Take-Two kann stark schwanken.',vd:'opp',vt:'Chance und Risiko'},
+  'thanks':{short:'US-Börsen sind zu bzw. nur kurz offen. Die Einkaufsstimmung gilt als Signal für Händler.',vd:'neu',vt:'Nebenthema'},
+  'fed-dec':{short:'Die US-Notenbank entscheidet über die Zinsen. Eine Erhöhung ist weitgehend erwartet.',vd:'risk',vt:'Zinsen im Fokus'},
+  'cpi-dec':{short:'Neue Inflationszahlen. Sie können die Zinserwartungen drehen.',vd:'neu',vt:'Zinsen im Fokus'},
+  'ecb-dec':{short:'Zinsentscheid in Europa. Analysten rechnen mit einer Erhöhung.',vd:'neu',vt:'Zinsen im Fokus'}
+};
+function firstSentence(t){var x=String(t).replace(/<[^>]+>/g,''); var i=x.indexOf('. '); return i>0?x.slice(0,i+1):x;}
+function dcard(cls,title,badge,short,vd,vt,exp,note,syms){
+  return '<details class="dc '+cls+'"><summary><div class="srow"><div class="st">'+esc(title)+'</div>'+badge+'</div>'
+    +'<div class="sh">'+esc(short)+'</div>'+(vt?'<span class="vd '+vd+'">'+esc(vt)+'</span>':'')+'</summary>'
+    +'<div class="body"><div class="exp">'+exp+'</div>'+(note?'<div class="note">Hinweis: '+esc(note)+'</div>':'')
+    +'<div>'+chipsFor(syms)+'</div></div></details>';
+}
+function renderEvents(){
+  var now=Date.now(), h='', list=EVENTS.filter(function(e){return new Date(e.at).getTime()>now-86400000;});
+  list.sort(function(a,b){return new Date(a.at)-new Date(b.at);});
+  list.forEach(function(e){
+    var t=new Date(e.at).getTime(), days=Math.ceil((t-now)/86400000), M=EV_META[e.id]||{};
+    var cd=days<=0?'heute':(days===1?'morgen':'in '+days+' Tagen');
+    var date=new Date(t).toLocaleDateString('de-DE',{weekday:'short',day:'2-digit',month:'2-digit'});
+    var badge='<span class="cd '+(days<=3?'soon':'')+'">'+cd+'</span>';
+    h+=dcard('ev',date+' · '+e.title,badge,M.short||firstSentence(e.exp),M.vd||'neu',M.vt||'',e.exp,e.note,e.syms);
+  });
+  if(!h) h='<div class="card"><div class="muted">Keine Termine hinterlegt.</div></div>';
+  $('events').innerHTML=h;
+  var a='';
+  AFTER.forEach(function(x){
+    a+=dcard('af',x.title,'',firstSentence(x.exp),'neu','',x.exp,'',x.syms)
+      .replace('</div></summary>','</div><div class="muted" style="margin-top:6px">'+esc(x.when)+'</div></summary>');
+  });
+  $('after').innerHTML=a;
+  renderGlance(list, now);
+  notifyEvents(list, now);
+}
+function renderGlance(list, now){
+  function when(e){var d=Math.ceil((new Date(e.at).getTime()-now)/86400000); return d<=0?'heute':(d===1?'morgen':'in '+d+' Tagen');}
+  var li='<li><b>Stimmung:</b> Die Märkte haben sich am 09.11. kräftig erholt (DAX +2,6 %), bleiben aber nervös.</li>'
+    +'<li><b>Größte Unsicherheit:</b> Der Iran-Konflikt und der Ölpreis. Fällt Öl weiter, hilft das dem DAX.</li>';
+  if(list[0]) li+='<li><b>Nächster Termin:</b> '+esc(list[0].title)+' ('+when(list[0])+').</li>';
+  if(list[1]) li+='<li><b>Danach:</b> '+esc(list[1].title)+' ('+when(list[1])+').</li>';
+  $('glance').innerHTML='<h3>Auf einen Blick</h3><ul>'+li+'</ul>';
+}
+function notifyEvents(list, now){
+  if(lsGet('vp_notif')!=='1') return;
+  var seen={}; try{seen=JSON.parse(lsGet('vp_seenev')||'{}');}catch(e){}
+  var due=list.filter(function(e){var t=new Date(e.at).getTime(); return t-now<=48*3600000 && t>now-3600000 && !seen[e.id];});
+  if(!due.length) return;
+  due.forEach(function(e){seen[e.id]=1;});
+  lsSet('vp_seenev',JSON.stringify(seen));
+  var msg='Bald: '+due[0].title;
+  showBanner(msg);
+  if(typeof Notification!=='undefined' && Notification.permission==='granted'){ try{new Notification('VenturePulse Termin',{body:msg});}catch(e){} }
+}
+
+
+/* ============ Schnappschuss (Stand 09.11.2026 ca. 18:30, Quellen: wallstreet-online, Handelsblatt) ============ */
+var SNAP_TIME='09.11.2026, ca. 18:30 Uhr';
+var SNAP_MARKETS=[
+  {n:'DAX',v:'26.340',c:2.6},{n:'Dow Jones',v:'52.360',c:2.0},{n:'S&P 500',v:'7.544',c:2.3},
+  {n:'Nasdaq 100',v:'27.860',c:3.2},{n:'Brent-Öl',v:'93,5 $',c:-4.3},{n:'Gold',v:'4.105 $',c:0.9}
+];
+var SNAP_NEWS=[
+  {t:'Wall Street erholt sich vom KI-Ausverkauf: Dow +ca. 900 Punkte, Nasdaq 100 +3 %. Trump zweifelt das Ergebnis der Zwischenwahlen an.',s:'wallstreet-online',syms:['^GSPC','^IXIC']},
+  {t:'Ölpreis fällt weiter: Hoffnung auf Diplomatie im Iran-Konflikt, Brent bei rund 94 $. In der Vorwoche der stärkste Rückgang seit April 2020.',s:'Handelsblatt / wallstreet-online',syms:['CL=F','XOM','RHM.DE']},
+  {t:'Dax klettert wieder über 26.000 Punkte, Chipwerte erholen sich nach zweistelligen Verlusten am Vortag.',s:'Handelsblatt',syms:['^GDAXI','NVDA']},
+  {t:'Nvidia unter Druck wegen Spionageverdacht, vor den Quartalszahlen Mitte November.',s:'wallstreet-online',syms:['NVDA','AMD']},
+  {t:'Unicredit meldet Rekordgewinn, Chef erwägt schnellere Fusion von Commerzbank und HVB.',s:'Handelsblatt',syms:['DBK.DE']},
+  {t:'Über 900.000 Put-Kontrakte auf den Dax am Freitag, so viele wie seit dem Zoll-Crash im April 2025 nicht mehr.',s:'wallstreet-online',syms:['^GDAXI']}
+];
+function renderSnap(live){
+  var h='';
+  if(!live){
+    h+='<div class="demo">Live-Abruf nicht möglich. Hier läuft die Seite in einer geschützten Umgebung, die keine Börsen- und Nachrichtenserver erreichen darf. Gezeigt wird der <b>Schnappschuss vom '+SNAP_TIME+'</b>.</div>';
+  }
+  h+='<div class="grid" style="margin-bottom:10px">'+SNAP_MARKETS.map(function(m){
+    return '<div class="kpi"><small>'+esc(m.n)+'</small><b>'+esc(m.v)+' <span class="'+cls(m.c)+'">'+sg(m.c)+'</span></b></div>';}).join('')+'</div>';
+  h+=SNAP_NEWS.map(function(n){
+    return '<div class="card"><div class="muted">'+esc(n.s)+' · 09.11.2026</div><div style="font-size:14px;font-weight:600;margin:4px 0;line-height:1.4">'+esc(n.t)+'</div><div>'+chipsFor(n.syms)+'</div></div>';}).join('');
+  $('snap').innerHTML=h;
+  $('snapTitle').textContent=live?'📊 Marktstand & Schlagzeilen':'📊 Marktstand & Schlagzeilen (Schnappschuss)';
+}
+
+/* ============ Start ============ */
+renderEvents();
+renderSnap(false);
+updateNotifUi();
+scan();
+setInterval(function(){ scan(); }, 10*60*1000);
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) scan(); });
+</script>
+
+</body></html>
